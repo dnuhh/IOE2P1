@@ -2,12 +2,15 @@ let url = 'https://io.adafruit.com/api/v2/dnuh/feeds/button';
 let counter = 0;
 
 function setup() {
-    createCanvas(255, 255);
+    createCanvas(windowWidth, windowHeight);
+    colorMode(HSB);
+    text('Font Size 20', 10, 90);
 }
 
 function draw() {
-    fill(255, 10);
-    rect(0, 0, width, height);
+//    fill(255, 10);
+    
+    ellipse(200, 200, 100,100);
     if (counter % 80 == 0) {
         getData();
     }
@@ -15,14 +18,31 @@ function draw() {
 }
 
 function getData() {
-    let data;
+    let data, username, name;
     httpGet(url, 'json', function (response) {
         console.log(response);
         data = response.last_value;
-        let resize = map(data, 1, 0, 25, 150);
+        username = response.username;
+        if (username=="dnuh"){
+            name = "Deanna";
+        }
         noStroke();
-        fill(255, 0, 0);
-        ellipse(width / 2, height / 2, resize);
-        console.log(data);
+
+        console.log("Data: "+data);
+        fill(data,100,50);
+        background(0,0,255);
+        text(name, 100,(height/2)-20);
+        
+        if (data < 40){
+            
+            text("sad", 100,height/2);
+            console.log("sad");
+        }else if ((data >= 40) && (data < 80)){
+            text("neutral", 100,height/2);
+            console.log("neutral");
+        }else{
+            text("happy", 100,height/2);
+            console.log("happy");
+        }
     });
 }
